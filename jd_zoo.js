@@ -688,7 +688,7 @@ function collectFriendRecordColor(timeout = 0) {
           'Accept-Encoding' : `gzip, deflate, br`,
           'Accept-Language' : `zh-cn`
         },
-        body : `functionId=collectFriendRecordColor&body={"mpin":"RnFgwWRbPDGKy9RP--twXV_3bZt2p2ZADl2v","businessCode":"20118","assistType":"1"}&client=wh5&clientVersion=1.0.0`
+        body : `functionId=collectFriendRecordColor&body={"mpin":"ZXTKT0145rh7QRwQ81LSIwFjRWn6-7zx55awQ","businessCode":"20118","assistType":"1"}&client=wh5&clientVersion=1.0.0`
       }
       $.post(url, async (err, resp, data) => {
         try {
