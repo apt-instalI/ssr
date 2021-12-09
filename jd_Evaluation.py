@@ -26,7 +26,7 @@ from sendNotify import send
 
 
 # 需要评价的账号,输入 pt_pin 如：NeedEvaluation =  ['vdfd','qq345'] 注意是pt_pin;不填则默认全部评价
-NeedEvaluation = ['hu81296653;','jd_zZGAWLXSOdRW;','jd_AtLExLdhOuXk;','jd_5d0236eda376d;']
+NeedEvaluation = ['hu81296653','jd_zZGAWLXSOdRW']
 
 jieba.setLogLevel(jieba.logging.INFO)
 pwd = os.path.dirname(os.path.abspath(__file__)) + os.sep
