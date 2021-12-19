@@ -26,7 +26,7 @@ let shopname=''
 const token=[
     '',
     '61905EBC993BCEB8F571C52CB3A59B33',
-    '0D7DD20BBB7E8C4CBD9AB3BF7949AC4C',
+    '',
     '',
     '',
     '396DF5D0CA7E35723DE5CB0B2A8E7CBB',
