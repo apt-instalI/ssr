@@ -14,7 +14,7 @@ const $ = new Env('加购物车抽奖');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '' ,isPush = false;
-let activityIdList = ['5e733f46fd1b4d7db9ee3fbe345542ef', '0d609439062847e8a7b79db2968ba9d5', 'cb2f397a60994ae5b6f05913a3fd6384', '7ba1c4420f094931a90508bda10d92b1', '21a824f2b2c149528667179ed08a334a', 'ba0a7dcabdab4ae2af6aa3912c8f3f12', '5113f35b6f2a4c08bd413eb8573ebead', '1900f76d7d37467ca2eaf17992e67e57', '4b83932e9860452f8d102c3dae21a8ea', '49f8d4ba5be245bfa808ec98c0b9c95b', '29432360178c48bda065f6769e5ec1f4', 'aabfd610b86b482e81a513cb36d72af3', 'f728e93a6d694096845e80e6c537f852', 'c0c2a97214c7468c936220d01d74e556', 'de50659b20bc4dfe957d473ce799f22c', 'a9635959cc8a4672bd5ae5e4facf2194', '199c985626ff4cd2b8095e73376485ac', '82b2e9dd9e8f405c8c7b2cb4d6c412a9', '1b29dceb483541f68ce56c0c24aef172']
+let activityIdList = ['']
 let lz_cookie = {}
 
 if (process.env.ACTIVITY_ID && process.env.ACTIVITY_ID != "") {
