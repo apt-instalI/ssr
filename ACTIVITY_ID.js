@@ -5,8 +5,8 @@ https://lzkj-isv.isvjcloud.com/wxgame/activity/8530275?activityId=
 
 ACTIVITY_ID 
 
-JD_CART_REMOVESIZE || 20; // 运行一次取消多全部已关注的商品。数字0表示不取关任何商品
-JD_CART_REMOVEALL || true;    //是否清空，如果为false，则上面设置了多少就只删除多少条
+JD_CART_REMOVESIZE || 0; // 运行一次取消多全部已关注的商品。数字0表示不取关任何商品
+JD_CART_REMOVEALL || false;    //是否清空，如果为false，则上面设置了多少就只删除多少条
 
 pinBlackLists 黑名单,不跑的ck & 分开
 7 7 7 7 7 jd_wxCollectionActivity.js
