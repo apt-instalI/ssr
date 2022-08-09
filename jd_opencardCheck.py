@@ -6,6 +6,7 @@
 # 青龙里面要有监控的Github仓库的拉库命令，通过监控Github仓库来查看是否有新的开卡脚本
 # 如果发现新的开卡脚本则自动拉库并运行开卡脚本，如果发现已有多个相同开卡脚本时
 # 且其中一个开卡脚本已经运行过了或者正在运行，之后更新的开卡脚本将不会再运行
+
 # 填写要监控的GitHub仓库的 用户名/仓库名/分支/脚本关键词
 # 监控多个仓库请用 & 隔开
 export GitRepoHost="KingRan/KR/main/opencard&feverrun/my_scripts/main/opencard&smiek2121/scripts/master/opencard&okyyds/yyds/master/lzdz1"
@@ -18,6 +19,10 @@ export opencardDisable="true"
 # 任务参数，格式和青龙的 conc、desi 一样
 export opencardParam="desi JD_COOKIE 1 3-10"
 export opencardParam="conc JD_COOKIE"
+# 检测重复任务相似度阈值，值为数字，不使用变量则不检测重复任务（变量不能为空，不使用请注释变量）
+# 过小：两个不同的开卡脚本识别为同一个，过大：两个相同开卡脚本识别为两个不同脚本
+export opencardSimi="50"
+
 cron: */5 0-3 * * *
 new Env('开卡更新检测')
 """
@@ -26,7 +31,7 @@ from time import sleep
 from notify import send
 import requests,json,os,re,difflib
 
-print("软件版本：7.31.1")
+print("软件版本：8.1.1")
 
 # 显示日志
 def log(content):
@@ -159,12 +164,12 @@ def qlTask(scriptsName):
                 log(f'请求青龙失败：{url}')
                 log(f'错误信息：{rsp.json().get("message")}')
                 return
-    if 'opencardParam' in os.environ:
+    if 'opencardParam' in os.environ and "desi" not in tt[0]["command"]:
         url = qlHost+"/crons"
         body = {
             "command": tt[0]["command"]+" "+os.environ["opencardParam"],
             "schedule": tt[0]["schedule"],
-            "name": tt[0]["name"],
+            "name": TaskName,
             version["id"]: tt[0][version["id"]]
         }
         rsp = session.put(url=url,headers=headers,data=json.dumps(body))
@@ -172,21 +177,23 @@ def qlTask(scriptsName):
             log("成功更改命令："+rsp.json().get("data").get("command"))
     with open('./nameCron.json',"r",encoding='UTF-8') as f:
         TaskStr = json.load(f)
-    taskname=qlCronEqual(TaskName,TaskStr)
-    if not taskname:
-        return
+    if "opencardSimi" in os.environ:
+        taskname=qlCronEqual(TaskName,TaskStr)
+        if not taskname:
+            return
     # 运行开卡任务
     url = qlHost+"/crons/run"
     rsp = session.put(url=url,headers=headers,data=json.dumps(TaskID))
     if rsp.status_code == 200:
         log(f"运行开卡任务：{TaskName}")
-        if Repo[0] not in TaskStr:
-            TaskStr[Repo[0]]=[]
-        if taskname not in TaskStr[Repo[0]]:
-            TaskStr[Repo[0]].append(taskname)
-            with open(f"./nameCron.json","w",encoding='UTF-8') as f:
-                json.dump(TaskStr,f)
-                # log(f"保存任务名到nameCron.json文件")
+        if "opencardSimi" in os.environ:
+            if Repo[0] not in TaskStr:
+                TaskStr[Repo[0]]=[]
+            if taskname not in TaskStr[Repo[0]]:
+                TaskStr[Repo[0]].append(taskname)
+                with open(f"./nameCron.json","w",encoding='UTF-8') as f:
+                    json.dump(TaskStr,f)
+                    # log(f"保存任务名到nameCron.json文件")
     else:
         log(f'请求青龙失败：{url}')
         if "message" in rsp.json():
@@ -201,7 +208,7 @@ def qlCronEqual(TaskName,TaskStr):
     for i in TaskStr:
         for x in TaskStr[i]:
             point = round(difflib.SequenceMatcher(None,taskname,x).quick_ratio()*100)
-            if point>=70:
+            if point>=int(os.environ["opencardSimi"]):
                 log(f"任务名高度相似：{TaskName}/{x}={point}%")
                 log("放弃运行任务："+TaskName)
                 if Repo[0] not in TaskStr:
@@ -277,11 +284,11 @@ if 'GitRepoHost' in os.environ:
     if not os.path.exists(f"./nameScripts.json"):
         with open(f"./nameScripts.json","w") as f:
             json.dump({},f)
-        log(f"没有找到nameScripts.json文件！将自动生成")
+        print(f"没有找到nameScripts.json文件！将自动生成")
     if not os.path.exists(f"./nameCron.json"):
         with open(f"./nameCron.json","w") as f:
             json.dump({},f)
-        log(f"没有找到nameCron.json文件！将自动生成")
+        print(f"没有找到nameCron.json文件！将自动生成")
     if path:
         for RepoX in RepoHost:
             List=[]
