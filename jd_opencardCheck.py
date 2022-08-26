@@ -47,7 +47,7 @@ def GetQLToken():
         url = "http://127.0.0.1:5700/api/user"
         rsp = session.get(url=url,headers={"Content-Type":"application/json","Authorization":"Bearer "+qltoken})
         if rsp.status_code != 200:
-            url = "http://127.0.0.1:5700/api/user/printin"
+            url = "http://127.0.0.1:5700/api/user/login"
             body={"username": auth.get("username"),"password": auth.get("password")}
             qltoken = session.post(url=url,data=body).json().get("data").get("token")
     except:
